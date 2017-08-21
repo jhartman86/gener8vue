@@ -1,0 +1,42 @@
+#!/usr/bin/env node
+var prompt    = require('prompt');
+var fs        = require('fs-extra');
+var path      = require('path');
+var pkg       = require('../package.json');
+var cc        = require('camelcase');
+var jsonFile  = require('jsonfile');
+
+prompt.start();
+
+prompt.get(['project_name', 'your_name', 'description'], function (err, result) {
+  var dirName = cc(result.project_name);
+  var dest    = path.resolve(path.resolve(process.cwd()), dirName);
+  setup(dest, function () {
+    // Alter package.json contents of the scaffolded project
+    var file = path.resolve(dest, './package.json');
+
+    jsonFile.readFile(file, function (err, obj) {
+      if (err) { throw err; }
+
+      obj.name        = result.project_name;
+      obj.description = result.description;
+      obj.author      = result.your_name;
+      obj.version     = "0.0.1";
+
+      // Write back
+      jsonFile.writeFile(file, obj, {spaces: 2}, function (err) {
+        if (err) { throw err; }
+        console.log('Setup OK');
+      });
+    });
+  });
+});
+
+function setup(dest, next) {
+  fs.ensureDir(dest, function () {
+    require('simple-git')(dest).clone(pkg.scaffolds.vuejs, dest, function () {
+      // Strip the .git directory
+      fs.remove(path.resolve(dest, '.git'), next);
+    });
+  });
+}

@@ -1,0 +1,20 @@
+{
+  "name": "gener8vue",
+  "version": "0.0.1",
+  "description": "Generate a VueJS project scaffold.",
+  "bin": {
+    "gener8vue": "bin/gener8vue"
+  },
+  "scaffolds": {
+    "vuejs": "https://github.com/jhartman86/vuejs-scaffolding.git"
+  },
+  "author": "Jon Hartman",
+  "license": "ISC",
+  "dependencies": {
+    "camelcase": "4.1.0",
+    "fs-extra": "2.1.2",
+    "jsonfile": "3.0.0",
+    "prompt": "1.0.0",
+    "simple-git": "1.70.0"
+  }
+}
